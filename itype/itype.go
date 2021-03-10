@@ -8,8 +8,10 @@ import (
 	"strings"
 )
 
+// Type type
 type Type int
 
+// Type enum
 const (
 	STRING Type = iota
 	NUMBER
@@ -20,6 +22,7 @@ const (
 	UNKNOWN
 )
 
+// String type string
 func (t Type) String() string {
 	switch t {
 	case STRING:
@@ -56,7 +59,6 @@ var _numberTypes = map[string]bool{
 }
 
 // GetType get itype.Type of given object
-//
 func GetType(obj interface{}) Type {
 	if obj == nil {
 		return NULL
@@ -98,9 +100,8 @@ func Float(obj interface{}) float64 {
 	case bool:
 		if v {
 			return 1.0
-		} else {
-			return 0.0
 		}
+		return 0.0
 	case float32:
 		return float64(v)
 	case float64:
@@ -132,11 +133,12 @@ func Float(obj interface{}) float64 {
 		if v == "" {
 			return 0.0
 		}
-		if n, err := strconv.ParseFloat(v, 64); err != nil {
+
+		n, err := strconv.ParseFloat(v, 64)
+		if err != nil {
 			return 0.0
-		} else {
-			return n
 		}
+		return n
 	default:
 		return 0.0
 	}
@@ -156,9 +158,8 @@ func Int(obj interface{}) int64 {
 	case bool:
 		if v {
 			return 1
-		} else {
-			return 0
 		}
+		return 0
 	case float32:
 		return int64(v)
 	case float64:
@@ -190,11 +191,12 @@ func Int(obj interface{}) int64 {
 		if v == "" {
 			return 0
 		}
-		if n, err := strconv.ParseInt(v, 10, 64); err != nil {
+
+		n, err := strconv.ParseInt(v, 10, 64)
+		if err != nil {
 			return 0
-		} else {
-			return n
 		}
+		return n
 	default:
 		return 0
 	}
@@ -214,9 +216,8 @@ func Uint(obj interface{}) uint64 {
 	case bool:
 		if v {
 			return 1
-		} else {
-			return 0
 		}
+		return 0
 	case float32:
 		return uint64(v)
 	case float64:
@@ -248,11 +249,12 @@ func Uint(obj interface{}) uint64 {
 		if v == "" {
 			return 0
 		}
-		if n, err := strconv.ParseUint(v, 10, 64); err != nil {
+
+		n, err := strconv.ParseUint(v, 10, 64)
+		if err != nil {
 			return 0
-		} else {
-			return n
 		}
+		return n
 	default:
 		return 0
 	}
@@ -272,9 +274,8 @@ func String(obj interface{}) string {
 	case bool:
 		if v {
 			return "1"
-		} else {
-			return ""
 		}
+		return ""
 	case float32:
 		return strconv.FormatFloat(float64(v), 'f', -1, 32)
 	case float64:
@@ -315,8 +316,11 @@ func Bytes(obj interface{}) []byte {
 	return []byte(String(obj))
 }
 
+// EPSILON epsilon
 const EPSILON float64 = 1e-9
-const FALSE_STRINGS = "no,false,off,0,"
+
+// FalseStrings false string enum
+const FalseStrings = "no,false,off,0,"
 
 // Bool try to get bool value of given object.
 // number: 0 => false, otherwise => true
@@ -357,10 +361,10 @@ func Bool(obj interface{}) bool {
 		return v != 0
 	case []byte:
 		s := strings.ToLower(string(v))
-		return s != "" && strings.Index(FALSE_STRINGS, s+",") == -1
+		return s != "" && strings.Index(FalseStrings, s+",") == -1
 	case string:
 		s := strings.ToLower(v)
-		return s != "" && strings.Index(FALSE_STRINGS, s+",") == -1
+		return s != "" && strings.Index(FalseStrings, s+",") == -1
 	default:
 		return true
 	}

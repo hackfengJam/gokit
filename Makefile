@@ -10,4 +10,7 @@ lint: $(LINTS:=.lint)
 $(LINTS:=.lint):
 	golint -set_exit_status $(subst .lint,,$@)...
 
+unittest:
+	go test ./...
+
 .PHONE: lint
