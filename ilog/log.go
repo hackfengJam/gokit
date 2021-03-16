@@ -44,7 +44,7 @@ func Info(msg string, fields ...zap.Field) {
 
 // Infof default alias for Logger.Infof.
 func Infof(format string, args ...interface{}) {
-	getDefaultLogger().l.WithOptions(zap.AddCallerSkip(1)).Info(fmt.Sprintf(format, args))
+	getDefaultLogger().l.WithOptions(zap.AddCallerSkip(1)).Info(fmt.Sprintf(format, args...))
 }
 
 // Debug default alias for Logger.Debug.
@@ -54,7 +54,7 @@ func Debug(msg string, fields ...zap.Field) {
 
 // Debugf default alias for Logger.Debugf.
 func Debugf(format string, args ...interface{}) {
-	getDefaultLogger().l.WithOptions(zap.AddCallerSkip(1)).Debug(fmt.Sprintf(format, args))
+	getDefaultLogger().l.WithOptions(zap.AddCallerSkip(1)).Debug(fmt.Sprintf(format, args...))
 }
 
 // Error default alias for Logger.Error.
@@ -64,5 +64,5 @@ func Error(msg string, fields ...zap.Field) {
 
 // Errorf default alias for Logger.Errorf.
 func Errorf(format string, args ...interface{}) {
-	getDefaultLogger().l.WithOptions(zap.AddCallerSkip(1)).Error(fmt.Sprintf(format, args))
+	getDefaultLogger().l.WithOptions(zap.AddCallerSkip(1)).Error(fmt.Sprintf(format, args...))
 }
