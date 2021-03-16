@@ -7,6 +7,8 @@ import (
 )
 
 // StringSetEqual String Equal
+// 空间：O(m + n)
+// 时间：O(logM + logN) + O(min(m,n))
 func StringSetEqual(a []string, b []string) bool {
 	lnA := len(a)
 	lnB := len(b)
