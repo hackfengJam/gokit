@@ -27,7 +27,7 @@ func TestThreadPoolExecutor(t *testing.T) {
 		})
 		// fmt.Println(fmt.Sprintf("th: %d, has been submitted", i))
 	}
-	pool.Run()
+	pool.Start()
 
 	// fmt.Println("submit finished.")
 	waitGroup.Wait()

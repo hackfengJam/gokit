@@ -33,27 +33,30 @@ func (tpe *ThreadPoolExecutor) workerReady() {
 
 // Run run
 func (tpe *ThreadPoolExecutor) Run() {
-	go func() {
-		var taskQueue []taskFunc
-		for {
-			var req taskFunc
-			select {
-			case req = <-tpe.requestChan:
-				taskQueue = append(taskQueue, req)
-			case tpe.workerChan <- future.Placeholder:
-				if len(taskQueue) == 0 {
-					tpe.workerReady()
-				} else {
-					task := taskQueue[0]
-					taskQueue = taskQueue[1:]
-					go func() {
-						defer isafe.Recover(func() {
-							tpe.workerReady()
-						})
-						task()
-					}()
-				}
+	var taskQueue []taskFunc
+	for {
+		var req taskFunc
+		select {
+		case req = <-tpe.requestChan:
+			taskQueue = append(taskQueue, req)
+		case tpe.workerChan <- future.Placeholder:
+			if len(taskQueue) == 0 {
+				tpe.workerReady()
+			} else {
+				task := taskQueue[0]
+				taskQueue = taskQueue[1:]
+				go func() {
+					defer isafe.Recover(func() {
+						tpe.workerReady()
+					})
+					task()
+				}()
 			}
 		}
-	}()
+	}
+}
+
+// Start start
+func (tpe *ThreadPoolExecutor) Start() {
+	go tpe.Run()
 }
