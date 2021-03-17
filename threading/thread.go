@@ -1,6 +1,8 @@
 package threading
 
 import (
+	"sync"
+
 	"github.com/hackfengJam/gokit/future"
 	"github.com/hackfengJam/gokit/isafe"
 )
@@ -9,6 +11,7 @@ import (
 type ThreadPoolExecutor struct {
 	workerChan  chan future.PlaceholderType
 	requestChan chan taskFunc
+	once sync.Once
 }
 
 type taskFunc func()
@@ -18,12 +21,16 @@ func NewThreadPoolExecutor(maxWorkers int, maxWaiters int) *ThreadPoolExecutor {
 	return &ThreadPoolExecutor{
 		workerChan:  make(chan future.PlaceholderType, maxWorkers),
 		requestChan: make(chan taskFunc, maxWaiters),
+		once: sync.Once{},
 	}
 }
 
 // Submit submit
 func (tpe *ThreadPoolExecutor) Submit(task taskFunc) {
 	tpe.requestChan <- task
+	tpe.once.Do(func() {
+		tpe.start()
+	})
 }
 
 // workerReady Worker Ready
@@ -32,7 +39,7 @@ func (tpe *ThreadPoolExecutor) workerReady() {
 }
 
 // Run run
-func (tpe *ThreadPoolExecutor) Run() {
+func (tpe *ThreadPoolExecutor) run() {
 	var taskQueue []taskFunc
 	for {
 		var req taskFunc
@@ -57,6 +64,6 @@ func (tpe *ThreadPoolExecutor) Run() {
 }
 
 // Start start
-func (tpe *ThreadPoolExecutor) Start() {
-	go tpe.Run()
+func (tpe *ThreadPoolExecutor) start() {
+	go tpe.run()
 }
