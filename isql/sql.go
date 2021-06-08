@@ -26,7 +26,7 @@ func (s *SQLHandler) buildSQL(sep string) string {
 	if sep == "" {
 		sep = " "
 	}
-	return strings.Join(s.segment, " ")
+	return strings.Join(s.segment, sep)
 }
 
 // Build build
