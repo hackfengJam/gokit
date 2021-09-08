@@ -3,7 +3,9 @@ A common library for golang.
 
 ## Installation
 
-```go get github.com/hackfengJam/gokit```
+```
+go get github.com/hackfengJam/gokit
+```
 
 ## Quick Start
 
