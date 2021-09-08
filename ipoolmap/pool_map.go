@@ -30,7 +30,7 @@ var (
 // PoolMap Pool Map
 /*
 example:
-	type TestResult {
+	type TestResult struct {
         UID int64
 	}
 	args := []int64{1,2,3}
